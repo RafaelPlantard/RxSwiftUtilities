@@ -10,7 +10,7 @@ on:
 
 jobs:
   tests:
-    runs-on: macos-11.0
+    runs-on: [macos-10.15, macos-11.0]
 
     steps:
     - uses: actions/checkout@v2
@@ -30,3 +30,23 @@ jobs:
 
     - name: CodeCov
       run: bash <(curl -s https://codecov.io/bash) -J 'RxSwiftUtilities'
+  
+  deploy:
+    runs-on: [macos-11.0]
+    needs: [tests]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build
+      run: ./carthage.sh build --no-skip-current
+    
+    - name: Archive
+      run: ./carthage.sh archive RxSwiftUtilities
+    
+    - name: Release
+      uses: yakuhzi/action-release@v1.2.0
+      with:
+        file: RxSwiftUtilities.framework.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
