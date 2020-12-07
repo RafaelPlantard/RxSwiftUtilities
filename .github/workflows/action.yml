@@ -23,7 +23,7 @@ jobs:
           ${{ runner.os }}-carthage-
 
     - name: Carthage Bootstrap
-      run: carthage bootstrap --cache-builds --no-use-binaries --platform ios
+      run: ./carthage.sh bootstrap --cache-builds --no-use-binaries --platform ios
 
     - name: Run all tests
       run: xcodebuild clean build test -scheme 'RxSwiftUtilities iOS' -destination "platform=iOS Simulator,name=iPhone 11" -enableCodeCoverage YES
