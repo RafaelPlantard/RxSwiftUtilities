@@ -25,13 +25,13 @@ jobs:
     - name: Xcode Select
       uses: devbotsxyz/xcode-select@v1.1.0
       with:
-        version: 12.3
+        version: ${{ secrets.XCODE_VERSION }}
 
     - name: Carthage Bootstrap
       run: ./carthage.sh bootstrap --cache-builds --no-use-binaries --platform ios
 
     - name: Run all tests
-      run: xcodebuild clean build test -scheme 'RxSwiftUtilities iOS' -destination "platform=iOS Simulator,name=iPhone 11" -enableCodeCoverage YES
+      run: xcodebuild clean build test -scheme '${{ secrets.SCHEME }}' -destination "platform=iOS Simulator,name=iPhone 11" -enableCodeCoverage YES
 
     - name: CodeCov
-      run: bash <(curl -s https://codecov.io/bash) -J 'RxSwiftUtilities'
+      run: bash <(curl -s https://codecov.io/bash) -J '${{ secrets.PROJECT_NAME }}'
