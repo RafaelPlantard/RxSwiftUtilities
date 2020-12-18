@@ -18,6 +18,11 @@ jobs:
         key: ${{ runner.os }}-carthage-${{ hashFiles('**/Cartfile.resolved') }}
         restore-keys: |
           ${{ runner.os }}-carthage-
+          
+    - name: Xcode Select
+      uses: devbotsxyz/xcode-select@v1.1.0
+      with:
+        version: 12.3
 
     - name: Carthage Bootstrap
       run: ./carthage.sh bootstrap --cache-builds --no-use-binaries --platform ios
@@ -41,6 +46,11 @@ jobs:
         key: ${{ runner.os }}-carthage-${{ hashFiles('**/Cartfile.resolved') }}
         restore-keys: |
           ${{ runner.os }}-carthage-
+
+    - name: Xcode Select
+      uses: devbotsxyz/xcode-select@v1.1.0
+      with:
+        version: 12.3
 
     - name: Build
       run: ./carthage.sh build --no-skip-current --platform ios
