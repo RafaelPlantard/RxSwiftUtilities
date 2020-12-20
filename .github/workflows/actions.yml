@@ -5,7 +5,7 @@ on: [push, pull_request]
 env:
   PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
   SCHEME: ${{ secrets.SCHEME }}
-  REPOSITORY_NAME: ${{ github.event.repository.name }}
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 jobs:
   tests:
@@ -33,7 +33,7 @@ jobs:
       run: xcodebuild clean build test -scheme "${SCHEME}" -destination "platform=iOS Simulator,name=iPhone 11" -enableCodeCoverage YES
 
     - name: CodeCov
-      run: bash <(curl -s https://codecov.io/bash) -J "${REPOSITORY_NAME}"
+      run: bash <(curl -s https://codecov.io/bash)
 
   deploy:
     runs-on: macos-11.0
