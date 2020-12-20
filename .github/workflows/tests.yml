@@ -8,10 +8,15 @@ on:
     branches:
       - master
 
+env:
+  PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+  SCHEME: ${{ secrets.SCHEME }}
+  XCODE_VERSION: ${{ secrets.XCODE_VERSION }}
+
 jobs:
   tests:
     runs-on: macos-11.0
-
+      
     steps:
     - uses: actions/checkout@v2
 
@@ -25,13 +30,13 @@ jobs:
     - name: Xcode Select
       uses: devbotsxyz/xcode-select@v1.1.0
       with:
-        version: ${{ secrets.XCODE_VERSION }}
+        version: $XCODE_VERSION
 
     - name: Carthage Bootstrap
       run: ./carthage.sh bootstrap --cache-builds --no-use-binaries --platform ios
 
     - name: Run all tests
-      run: xcodebuild clean build test -scheme '${{ secrets.SCHEME }}' -destination "platform=iOS Simulator,name=iPhone 11" -enableCodeCoverage YES
+      run: xcodebuild clean build test -scheme '$SCHEME' -destination "platform=iOS Simulator,name=iPhone 11" -enableCodeCoverage YES
 
     - name: CodeCov
-      run: bash <(curl -s https://codecov.io/bash) -J '${{ secrets.PROJECT_NAME }}'
+      run: bash <(curl -s https://codecov.io/bash) -J '$PROJECT_NAME'
