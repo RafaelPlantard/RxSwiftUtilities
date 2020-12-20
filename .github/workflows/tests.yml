@@ -16,7 +16,7 @@ jobs:
   tests:
     runs-on: macos-11.0
     environment: Develop
-      
+
     steps:
     - uses: actions/checkout@v2
 

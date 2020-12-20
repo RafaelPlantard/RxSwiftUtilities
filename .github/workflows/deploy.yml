@@ -5,9 +5,14 @@ on:
     tags:
       - 3.*
 
+env:
+  PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+  SCHEME: ${{ secrets.SCHEME }}
+
 jobs:
   tests:
     runs-on: macos-11.0
+    environment: Develop
 
     steps:
     - uses: actions/checkout@v2
@@ -18,7 +23,7 @@ jobs:
         key: ${{ runner.os }}-carthage-${{ hashFiles('**/Cartfile.resolved') }}
         restore-keys: |
           ${{ runner.os }}-carthage-
-          
+
     - name: Xcode Select
       uses: devbotsxyz/xcode-select@v1.1.0
       with:
@@ -28,11 +33,11 @@ jobs:
       run: ./carthage.sh bootstrap --cache-builds --no-use-binaries --platform ios
 
     - name: Run all tests
-      run: xcodebuild clean build test -scheme '${{ secrets.SCHEME }}' -destination "platform=iOS Simulator,name=iPhone 11" -enableCodeCoverage YES
+      run: xcodebuild clean build test -scheme "${SCHEME}" -destination "platform=iOS Simulator,name=iPhone 11" -enableCodeCoverage YES
 
     - name: CodeCov
-      run: bash <(curl -s https://codecov.io/bash) -J '${{ secrets.PROJECT_NAME }}'
-  
+      run: bash <(curl -s https://codecov.io/bash) -J "${PROJECT_NAME}"
+
   deploy:
     runs-on: macos-11.0
     needs: tests
@@ -56,11 +61,11 @@ jobs:
       run: ./carthage.sh build --no-skip-current --platform ios
     
     - name: Archive
-      run: ./carthage.sh archive ${{ secrets.PROJECT_NAME }}
+      run: ./carthage.sh archive ${PROJECT_NAME}
     
     - name: Release
       uses: yakuhzi/action-release@v1.2.0
       with:
-        file: ${{ secrets.PROJECT_NAME }}.framework.zip
+        file: ${PROJECT_NAME}.framework.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
