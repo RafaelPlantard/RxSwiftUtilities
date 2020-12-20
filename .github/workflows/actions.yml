@@ -1,13 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - ${{ secrets.MAIN_BRANCH }}
-
-  push:
-    tags:
-      - 3.*
+on: [push, pull_request]
 
 env:
   PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
