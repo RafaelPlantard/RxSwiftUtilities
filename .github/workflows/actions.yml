@@ -9,7 +9,6 @@ env:
 jobs:
   tests:
     runs-on: macos-11.0
-    environment: Develop
 
     steps:
     - uses: actions/checkout@v2
@@ -37,7 +36,6 @@ jobs:
 
   deploy:
     runs-on: macos-11.0
-    environment: Develop
     needs: tests
     if: startsWith(github.ref, 'refs/tags/')
 
